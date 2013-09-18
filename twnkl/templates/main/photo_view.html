@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="row row-fluid">
+    <div class="container col-sm-12">    
+        <div class="panel panel-default">    
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ object.safe_filename }}</h3>
+            </div>
+            <div class="panel-body">
+                <img src="{{ object.image.url }}" style="max-width: 100%; align-center">
+                <p>
+                    <a href="{{ object.image.url }}">View Original Image</a>
+                </p>
+                This image is in the following groups.
+                <ul>
+                    {% for group in photo.groups.all %}
+                    <li><a href="{% url "photos" group.owner group.name %}">{{ group.name }}</a></li>
+                    {% endfor %}
+                    <form action="." method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

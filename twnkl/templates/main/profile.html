@@ -1,20 +1,26 @@
 {% extends "base.html" %}
 
 {% block body %}
-<div class="container">
-    <div class="well row">
-        {% for photo in object_list %}
-        <div class="col-xs-6 col-sm-3 col-md-2 col-lg-1">
-            <p>
-            <a href="{% url "photo" %}" class="thumbnail" width="100%" height="100%">
-                <img id="id_{{ photo.safe_filename }}" src="{{ photo.image.url }}">
-            </a>
-            </p>
+<div class="row row-fluid">
+    <div class="container col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Your Photos</h3>
+            </div>
+            <div class="panel-body">
+                {% for photo in object_list %}
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-1">
+                    <p>
+                    <a href="{% url "photo" photo.owner.username "default" photo.pk %}" class="thumbnail">
+                        <img id="id_{{ photo.safe_filename }}" src="{{ photo.image.url }}">
+                    </a>
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-    {% endfor %}
+    </div>
 </div>
-</div>
-
 {% endblock %}
 
 {% block script %}

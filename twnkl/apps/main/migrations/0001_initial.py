@@ -17,13 +17,13 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'main', ['Photo'])
 
-        # Adding M2M table for field group on 'Photo'
-        db.create_table(u'main_photo_group', (
+        # Adding M2M table for field groups on 'Photo'
+        db.create_table(u'main_photo_groups', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('photo', models.ForeignKey(orm[u'main.photo'], null=False)),
             ('photogroup', models.ForeignKey(orm[u'main.photogroup'], null=False))
         ))
-        db.create_unique(u'main_photo_group', ['photo_id', 'photogroup_id'])
+        db.create_unique(u'main_photo_groups', ['photo_id', 'photogroup_id'])
 
         # Adding M2M table for field tags on 'Photo'
         db.create_table(u'main_photo_tags', (
@@ -44,7 +44,7 @@ class Migration(SchemaMigration):
         db.create_table(u'main_photogroup', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
         ))
         db.send_create_signal(u'main', ['PhotoGroup'])
 
@@ -52,8 +52,8 @@ class Migration(SchemaMigration):
         # Deleting model 'Photo'
         db.delete_table(u'main_photo')
 
-        # Removing M2M table for field group on 'Photo'
-        db.delete_table('main_photo_group')
+        # Removing M2M table for field groups on 'Photo'
+        db.delete_table('main_photo_groups')
 
         # Removing M2M table for field tags on 'Photo'
         db.delete_table('main_photo_tags')
@@ -103,7 +103,7 @@ class Migration(SchemaMigration):
         },
         u'main.photo': {
             'Meta': {'object_name': 'Photo'},
-            'group': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['main.PhotoGroup']", 'symmetrical': 'False'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['main.PhotoGroup']", 'symmetrical': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
             'loc': ('geoposition.fields.GeopositionField', [], {'max_length': '42', 'blank': 'True'}),
@@ -114,7 +114,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'PhotoGroup'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'main.tag': {
             'Meta': {'object_name': 'Tag'},

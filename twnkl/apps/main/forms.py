@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from django.forms.widgets import TextInput, PasswordInput, Textarea, FileInput, Select
+from django.forms.widgets import TextInput, PasswordInput, Textarea, FileInput, Select, CheckboxInput
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms.widgets import TextInput, PasswordInput
@@ -53,10 +53,20 @@ class PhotoUploadForm(forms.ModelForm):
         self.fields['image'].widget = FileInput(attrs={'style':'display:none'})
         self.fields['image'].label = ""
         self.fields['image'].help_text = ""
-        self.fields['group'].widget = Select() 
-        self.fields['group'].label = ""
-        self.fields['group'].help_text = ""
+        self.fields['groups'].widget = CheckboxInput()
+        self.fields['groups'].label = ""
+        self.fields['groups'].help_text = ""
+        self.fields['groups'].required = False
+        #self.fields['loc'].widget = TextInput(attrs={'placeholder': 'Where?',
+        #                                             'class':'form-control'})
+        #self.fields['loc'].label = ""
 
     class Meta:
         model = Photo
-        exclude = ('owner','loc',)
+        exclude = ('owner','loc')
+
+class PhotoUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Photo
+        exclude = ('owner', 'loc', 'image',)

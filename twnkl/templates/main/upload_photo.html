@@ -1,17 +1,31 @@
-<div class="well col-sm-6">
-    Upload a photo.
-    <form enctype="multipart/form-data" action="{% url "photo" %}" method="post">
-        {% csrf_token %}
-        {{ photo_upload_form.as_p }}
-        <div class="input-group">
-            <input id="photoCover" class="form-control" type="text">
-            <span class="input-group-btn">
-                <button id="browse_btn" class="btn btn-default" type="button">Browse</button>
-            </span>
-        </div>   
-        <p>
-        </p> 
-        <button type="submit" class="btn btn-primary btn-large">Upload Photo</button>
-    </form>
+<div class="container col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Upload a photo</h3>
+        </div>
+        <div class="panel-body">
+            {% if form.errors %}
+            <div class="alert alert-error">
+                {% for error in form.error_messages %}
+                <p>
+                {{ error }}
+                </p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <form id="upload_form" enctype="multipart/form-data" action="{% url "upload_photo" %}" method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input id="photoCover" class="form-control" type="text">
+                    <span class="input-group-btn">
+                        <button id="browse_btn" class="btn btn-default" type="button">Browse</button>
+                    </span>
+                </div>
+                {{ photo_upload_form.as_p }}
+                <p>
+                </p> 
+                <button type="submit" class="btn btn-primary btn-large">Upload Photo</button>
+            </form>
+        </div>
+    </div>
 </div>
-

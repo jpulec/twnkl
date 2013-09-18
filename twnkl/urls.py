@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
-from twnkl.apps.main.views import Home, Login, Logout, Register, Profile, Search, PhotoView, PhotosView
+from twnkl.apps.main.views import Home, Login, Logout, Register, Profile, Search, PhotoView, PhotosView, UploadPhotoView
 
 urlpatterns = patterns('',
     # Examples:
@@ -14,9 +14,10 @@ urlpatterns = patterns('',
     url(r'^register/$', Register.as_view(), name="register"),
     url(r'^search/$', Search.as_view(), name="search"),
     url(r'^search/(?P<term>\w+)/$', Search.as_view(), name="search"),
-    url(r'^photo/(?P<group>\w+)/(?P<name>\w+)/$', PhotoView.as_view(), name="photo"),
+    url(r'^photo/(?P<owner>\w+)/(?P<group>\w+)/(?P<pk>\d+)/$', PhotoView.as_view(), name="photo"),
     url(r'^photo/upload/$', UploadPhotoView.as_view(), name="upload_photo"),
     url(r'^photos/$', PhotosView.as_view(), name="photos"),
+    url(r'^photos/(?P<owner>\w+)/(?P<group>\w+)/$', PhotosView.as_view(), name="photos"),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^accounts/profile/$', Profile.as_view(), name="profile"),
     url(r'^accounts/profile/(?P<username>\w+)/$', Profile.as_view(), name="profile"),

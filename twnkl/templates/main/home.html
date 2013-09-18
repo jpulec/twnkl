@@ -3,15 +3,13 @@
 
 
 {% block body %}
-<div class="container">
-    <p>
-    {% include "main/nearby_feed.html" %}
+    <div class="row row-fluid">
+{% include "main/nearby_feed.html" %}
     {% if user.is_authenticated %}
         {% include "main/upload_photo.html" %}
     {% else %}
         {% include "main/signin.html" %}
     {% endif %}
-    </p>
 </div>
 {% endblock body %}
 
@@ -28,4 +26,6 @@ $('#browse_btn').click( function () {
 
 
 </script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBaLOIWJwRzsQWsWBrfdRA4C5XRnzenh5s&sensor=true"></script>
+{% include "main/map_location_js.html" %} 
 {% endblock script %}
