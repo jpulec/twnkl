@@ -1,4 +1,5 @@
 from django.views.generic.base import View, TemplateView, RedirectView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -96,7 +97,13 @@ class Search(ListView):
     def get_queryset(self):
         return Photo.objects.filter(tags__text__iexact=self.request.GET.get('term', self.kwargs.get("term", "")))
 
-class PhotoView(CreateView):
+class PhotosView(ListView):
+    model = Photo
+
+class PhotoView(UpdateView):
+    model = Photo
+
+class UploadPhotoView(CreateView):
     model = Photo
     success_url = "/"
     form_class = PhotoUploadForm

@@ -2,12 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 from geoposition.fields import GeopositionField
 
+import os
+
 class Photo(models.Model):
     image = models.ImageField(upload_to="images/")
     owner = models.ForeignKey(User)
     group = models.ManyToManyField('PhotoGroup', blank=True)
     tags  = models.ManyToManyField('Tag', blank=True)
     loc   = GeopositionField(blank=True)
+
+    def safe_filename(self):
+        return os.path.splitext(os.path.basename(self.image.name))[0]
 
     def __unicode__(self):
         return str(self.owner) + ":" + str(self.tags) + ":" + str(self.group)
