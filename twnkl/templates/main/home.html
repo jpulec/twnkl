@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{% if user.is_authenticated %}Home{% else %}Sign In{% endif %}{% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <p>
+    {% include "main/nearby_feed.html" %}
+    {% if user.is_authenticated %}
+        {% include "main/upload_photo.html" %}
+    {% else %}
+        {% include "main/signin.html" %}
+    {% endif %}
+    </p>
+</div>
+{% endblock body %}
+
+
+{% block script %}
+<script type="text/javascript">
+$('input[id=id_image]').change( function() {
+        $('#photoCover').val($(this).val());
+        });
+
+$('#browse_btn').click( function () {
+        $('input[id=id_image]').click();
+        });
+
+
+</script>
+{% endblock script %}

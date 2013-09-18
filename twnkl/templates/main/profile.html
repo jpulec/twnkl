@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container">
+    <div class="well">
+    {% for photo in object_list %}
+    <img src="{{ photo.image.url }}">
+    {% endfor %}
+</div>
+</div>
+
+{% endblock %}
