@@ -8,6 +8,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.utils.encoding import force_text
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 from django.http import HttpResponseRedirect
@@ -64,6 +65,7 @@ class Home(ListView):
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
         context['recent_list'] = Photo.objects.order_by('-dt')[0:20]
+        print context['recent_list']
         if not self.request.user.is_authenticated():
             context['signin_form'] = MyAuthenticationForm()
             context['registration_form'] = RegistrationForm()
