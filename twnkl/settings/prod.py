@@ -1,9 +1,6 @@
 from common import *
 import dj_database_url
 
-DEBUG= True
-TEMPLATE_DEBUG=True
-
 DATABASES['default'] = dj_database_url.config()
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
