@@ -36,8 +36,8 @@ nosetests.xml
 .pydevproject
 
 # Swap files
-*.swo
 *.swp
+*.swo
 
 # Temps
 ~*

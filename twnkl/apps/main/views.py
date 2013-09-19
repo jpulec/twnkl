@@ -118,7 +118,7 @@ class PhotoView(UpdateView):
     model = Photo
     template_name = "main/photo_view.html"
     form_class = PhotoUpdateForm
-    
+
     def get_success_url(self):
         return force_text(self.request.META['HTTP_REFERER'])
 

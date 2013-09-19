@@ -5,3 +5,11 @@
 body {
     background-image: url("../img/bg.jpg");
 }
+
+footer {
+	color: white;
+}
+
+.popover {
+	width: 200px;
+}
