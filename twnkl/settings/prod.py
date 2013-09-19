@@ -2,8 +2,8 @@ from common import *
 from storages.backends.s3boto import S3BotoStorage
 import dj_database_url
 
-DEBUG= False
-TEMPLATE_DEBUG=False
+DEBUG= True
+TEMPLATE_DEBUG=True
 
 DATABASES['default'] = dj_database_url.config()
 
