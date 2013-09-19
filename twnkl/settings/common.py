@@ -122,7 +122,6 @@ INSTALLED_APPS = (
     'twnkl.apps.main',
     'south',
     'geoposition',
-    'django_social_share',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

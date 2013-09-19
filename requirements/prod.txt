@@ -1,6 +1,6 @@
 -r common.txt
 gunicorn==18.0
-django-storages>=1.1.6
-psycopg2>=2.4.6
-boto==2.10.0
-dj-database-url>=0.2.1
+django-storages==1.1.8
+psycopg2==2.5.1
+boto==2.13.3
+dj-database-url==0.2.2
