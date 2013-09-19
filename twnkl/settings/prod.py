@@ -24,3 +24,7 @@ STATIC_URL += "static/"
 MEDIA_URL += "media/"
 
 INSTALLED_APPS += ('gunicorn', 'storages', 'raven.contrib.django.raven_compat')
+
+RAVEN_CONFIG = {
+        'dsn': os.environ['SENTRY_DSN'],
+        }
