@@ -13,7 +13,6 @@ ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-ADMIN_MEDIA_PREFIX = "/static/admin/"
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
@@ -22,7 +21,6 @@ AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
 
 S3_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-ADMIN_MEDIA_PREFIX = S3_URL + 'static/admin/'
 STATIC_URL = MEDIA_URL = S3_URL
 
 STATIC_URL += "static/"
