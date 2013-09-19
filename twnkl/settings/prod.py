@@ -23,4 +23,4 @@ STATIC_URL = MEDIA_URL = S3_URL
 STATIC_URL += "static/"
 MEDIA_URL += "media/"
 
-INSTALLED_APPS += ('gunicorn', 'storages',)
+INSTALLED_APPS += ('gunicorn', 'storages', 'raven.contrib.django.raven_compat')
