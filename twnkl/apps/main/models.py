@@ -6,10 +6,12 @@ import os
 
 class Photo(models.Model):
     image = models.ImageField(upload_to="images/")
+    name  = models.CharField(max_length=256)
     owner = models.ForeignKey(User)
     groups= models.ManyToManyField('PhotoGroup')
     tags  = models.ManyToManyField('Tag', blank=True)
     loc   = GeopositionField(blank=True)
+    dt    = models.DateTimeField(auto_now_add=True)
 
     def get_first_group(self):
         return self.groups[0].name

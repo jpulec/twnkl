@@ -10,13 +10,26 @@
                 <h3 class="panel-title">Your Photos</h3>
             </div>
             <div class="panel-body">
-                {% for photo in object_list %}
-                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-1">
-                    <p>
-                    <a href="{% url "photo" photo.owner.username "default" photo.pk %}" class="thumbnail">
-                        <img id="id_{{ photo.safe_filename }}" src="{{ photo.image.url }}">
-                    </a>
-                    </p>
+                {% for group in object_list %}
+                <div class="row row-fluid">
+                    <div class="container col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a href="{% url "photos" group.owner.username group.name %}" class="panel-title">{{ group.name }}</a>
+                            </div>
+                            <div class="panel-body">
+                                {% for photo in group.photo_set.all %}
+                                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-1">
+                                    <p>
+                                    <a href="{% url "photo" photo.owner.username "default" photo.pk %}" class="thumbnail">
+                                        <img id="id_{{ photo.safe_filename }}" src="{{ photo.image.url }}">
+                                    </a>
+                                    </p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
@@ -27,14 +40,15 @@
 
 {% block script %}
 <script>
-{% for photo in object_list %}
+{% for group in object_list %}
+{% for photo in group.photo_set.all %}
 
 $("#id_{{ photo.safe_filename }}").popover({ 'html':'true',
                                      'placement':'bottom',
                                      'trigger': 'hover',
                                      'container': 'body',
                                      'content':"<img src='{{ photo.image.url }}' width='100%'>"});
-        
+{% endfor %} 
 
 {% endfor %}
 </script>

@@ -4,9 +4,9 @@
             <h3 class="panel-title">Upload a photo</h3>
         </div>
         <div class="panel-body">
-            {% if form.errors %}
+            {% if photo_upload_form.errors.items %}
             <div class="alert alert-error">
-                {% for error in form.error_messages %}
+                {% for field, error in photo_upload_form.errors.items%}
                 <p>
                 {{ error }}
                 </p>
@@ -21,7 +21,11 @@
                         <button id="browse_btn" class="btn btn-default" type="button">Browse</button>
                     </span>
                 </div>
-                {{ photo_upload_form.as_p }}
+                {% for field in photo_upload_form %}
+                <p>    
+                {{ field }}
+                </p>
+                {% endfor %}
                 <p>
                 </p> 
                 <button type="submit" class="btn btn-primary btn-large">Upload Photo</button>

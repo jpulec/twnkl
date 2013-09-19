@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms.widgets import TextInput, PasswordInput
 from django.contrib.auth.models import User
-from twnkl.apps.main.models import Photo
+from twnkl.apps.main.models import Photo, PhotoGroup
 
 class RegistrationForm(UserCreationForm):
     class Meta:
@@ -45,18 +45,21 @@ class MyAuthenticationForm(AuthenticationForm):
 
 class PhotoUploadForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
         super(PhotoUploadForm, self).__init__(*args, **kwargs)
-        self.fields['tags'].widget = TextInput(attrs={'placeholder':'Enter tags',
+        self.fields['name'].label = ""
+        self.fields['name'].widget = TextInput(attrs={'placeholder':'Name',
+                                                      'class':'form-control'})
+        self.fields['tags'].widget = TextInput(attrs={'placeholder':'Enter Tags',
                                                       'class':'form-control'})
         self.fields['tags'].label = "" 
         self.fields['tags'].help_text = ""
         self.fields['image'].widget = FileInput(attrs={'style':'display:none'})
         self.fields['image'].label = ""
         self.fields['image'].help_text = ""
-        self.fields['groups'].widget = CheckboxInput()
+        self.fields['groups'].widget = CheckboxSelectMultiple(choices=[(o.id, str(o.name)) for o in PhotoGroup.objects.filter(owner__username=user)])
         self.fields['groups'].label = ""
         self.fields['groups'].help_text = ""
-        self.fields['groups'].required = False
         #self.fields['loc'].widget = TextInput(attrs={'placeholder': 'Where?',
         #                                             'class':'form-control'})
         #self.fields['loc'].label = ""
@@ -67,12 +70,13 @@ class PhotoUploadForm(forms.ModelForm):
 
 class PhotoUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
         super(PhotoUpdateForm, self).__init__(*args, **kwargs)
-        self.fields['tags'].widget = TextInput(attrs={'placeholder':'Enter tags',
+        self.fields['tags'].widget = TextInput(attrs={'placeholder':'Enter Tags',
                                                       'class':'form-control'})
         self.fields['tags'].label = "" 
         self.fields['tags'].help_text = ""
-        self.fields['groups'].widget = CheckboxSelectMultiple()
+        self.fields['groups'].widget = CheckboxSelectMultiple(choices=[(o.id, str(o.name)) for o in PhotoGroup.objects.filter(owner__username=user)])
         self.fields['groups'].label = ""
         self.fields['groups'].help_text = ""
 

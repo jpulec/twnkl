@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
+from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
@@ -62,11 +63,13 @@ class Home(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
+        context['recent_list'] = Photo.objects.order_by('-dt')[0:20]
+        print context['recent_list']
         if not self.request.user.is_authenticated():
             context['signin_form'] = MyAuthenticationForm()
             context['registration_form'] = RegistrationForm()
         else:
-            context['photo_upload_form'] = PhotoUploadForm()
+            context['photo_upload_form'] = PhotoUploadForm(user=self.request.user.username)
         return context
 
 class Register(CreateView):
@@ -77,6 +80,8 @@ class Register(CreateView):
     def form_valid(self, form):
         form.instance.backend = 'django.contrib.auth.backends.ModelBackend'
         self.object = form.save()
+        group = PhotoGroup(owner=self.object, name="default")
+        group.save()
         auth_login(self.request, self.object)
         if self.request.session.test_cookie_worked():
             self.request.session.delete_test_cookie()
@@ -84,10 +89,13 @@ class Register(CreateView):
 
 class Profile(ListView):
     template_name = "main/profile.html"
-    model = Photo
+    model = PhotoGroup
 
     def get_queryset(self):
-        return Photo.objects.filter(owner__username=self.kwargs.get('owner', self.request.user.username))
+        if 'username' in self.kwargs:
+            get_object_or_404(User, username=self.kwargs['username'])
+            return PhotoGroup.objects.filter(owner__username=self.kwargs['username'])
+        return PhotoGroup.objects.filter(owner__username=self.request.user.username)
 
 class Search(ListView):
     template_name = "main/search_results.html"
@@ -122,9 +130,14 @@ class PhotoView(UpdateView):
     def get_success_url(self):
         return force_text(self.request.META['HTTP_REFERER'])
 
+    def get_form_kwargs(self):
+        kwargs = super(PhotoView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user.username
+        return kwargs
+
 class UploadPhotoView(CreateView):
     model = Photo
-    success_url = "/"
+    success_url = "/accounts/profile/"
     form_class = PhotoUploadForm
 
     def post(self, request, *args, **kwargs):
@@ -136,7 +149,6 @@ class UploadPhotoView(CreateView):
         #for tag in self.request.POST.get('tags', ""):
         #    tag_objects = [tag_object for tag_object, created in Tag.objects.get_or_create(text=tag)]
         #form.instance.tags = tag_objects
-        form.instance.group = PhotoGroup.objects.get_or_create(name=self.request.POST.get('group', 'default'), owner=User.objects.get(username=self.request.user))
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -153,11 +165,19 @@ class UploadPhotoView(CreateView):
     def form_invalid(self):
         return HttpResponseRedirect("/")
 
+    def get_form_kwargs(self):
+        kwargs = super(UploadPhotoView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user.username
+        return kwargs
+
     def get_exif(self, fn):
         ret = {}
-        i = Image.open(fn)
-        info = i._getexif()
-        for tag, value in info.items():
-            decoded = TAGS.get(tag, tag)
-            ret[decoded] = value
+        try:
+            i = Image.open(fn)
+            info = i._getexif()
+            for tag, value in info.items():
+                decoded = TAGS.get(tag, tag)
+                ret[decoded] = value
+        except AttributeError as e:
+            pass
         return ret

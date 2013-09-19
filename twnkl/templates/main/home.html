@@ -4,7 +4,10 @@
 
 {% block body %}
     <div class="row row-fluid">
-{% include "main/nearby_feed.html" %}
+        <div class="container col-sm-6">
+        {% include "main/recent_feed.html" %}
+        {% include "main/nearby_feed.html" %}
+        </div>
     {% if user.is_authenticated %}
         {% include "main/upload_photo.html" %}
     {% else %}
@@ -18,12 +21,21 @@
 <script type="text/javascript">
 $('input[id=id_image]').change( function() {
         $('#photoCover').val($(this).val());
+        $('#id_name').val($(this).val().split('\\').pop().split('.').shift());
         });
 
 $('#browse_btn').click( function () {
         $('input[id=id_image]').click();
         });
 
+{% for photo in recent_list %}
+
+$("#id_{{ photo.safe_filename }}").popover({ 'html':'true',
+                                     'placement':'bottom',
+                                     'trigger': 'hover',
+                                     'container': 'body',
+                                     'content':"<img src='{{ photo.image.url }}' width='100%'>"});
+{% endfor %}
 
 </script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBaLOIWJwRzsQWsWBrfdRA4C5XRnzenh5s&sensor=true"></script>
