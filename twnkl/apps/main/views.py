@@ -8,6 +8,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.utils.encoding import force_text
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 from django.http import HttpResponseRedirect

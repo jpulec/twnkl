@@ -7,9 +7,13 @@ from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from twnkl.apps.main.models import Photo, PhotoGroup
 
-class BetterCheckbox(forms.CheckboxSelectMultiple.renderer):
-    def render(self):
-        return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
+class BetterCheckbox(CheckboxSelectMultiple):
+    def __init__(self, *args, **kwargs):
+        return super(BetterCheckbox, self).__init__(*args, **kwargs)
+
+    def render(self, *args, **kwargs):
+        output = super(BetterCheckbox, self).render(*args, **kwargs)
+        return mark_safe("<label>Enter groups this photo should be a part of:</label><p>" + output.replace(u'<ul>', u'').replace(u'<li>', u'') + "</p>")
 
 
 class RegistrationForm(UserCreationForm):
@@ -55,17 +59,20 @@ class PhotoUploadForm(forms.ModelForm):
         super(PhotoUploadForm, self).__init__(*args, **kwargs)
         self.fields['name'].label = ""
         self.fields['name'].widget = TextInput(attrs={'placeholder':'Name',
-                                                      'class':'form-control'})
+                                                      'class':'form-control',
+                                                      'required':''})
         self.fields['tags'].widget = TextInput(attrs={'placeholder':'Enter Tags',
                                                       'class':'form-control'})
         self.fields['tags'].label = "" 
         self.fields['tags'].help_text = ""
-        self.fields['image'].widget = FileInput(attrs={'style':'display:none'})
+        self.fields['image'].widget = FileInput(attrs={'style':'display:none',
+                                                       'required':''})
         self.fields['image'].label = ""
         self.fields['image'].help_text = ""
-        self.fields['groups'].widget = BetterCheckbox(choices=[(o.id, str(o.name)) for o in PhotoGroup.objects.filter(owner__username=user)])
-        self.fields['groups'].label = "Check which photo groups to add this image to:"
+        self.fields['groups'].widget = BetterCheckbox(attrs={'required':''},choices=[(o.id, str(o.name)) for o in PhotoGroup.objects.filter(owner__username=user)])
+        self.fields['groups'].label = ""
         self.fields['groups'].help_text = ""
+        self.fields['groups'].required = True
         #self.fields['loc'].widget = TextInput(attrs={'placeholder': 'Where?',
         #                                             'class':'form-control'})
         #self.fields['loc'].label = ""
@@ -82,7 +89,10 @@ class PhotoUpdateForm(forms.ModelForm):
                                                       'class':'form-control'})
         self.fields['tags'].label = "" 
         self.fields['tags'].help_text = ""
-        self.fields['groups'].widget = CheckboxSelectMultiple(choices=[(o.id, str(o.name)) for o in PhotoGroup.objects.filter(owner__username=user)])
+        self.fields['name'].label = ""
+        self.fields['name'].widget = TextInput(attrs={'placeholder':'Name',
+                                                      'class':'form-control'})
+        self.fields['groups'].widget = BetterCheckbox(choices=[(o.id, str(o.name)) for o in PhotoGroup.objects.filter(owner__username=user)])
         self.fields['groups'].label = ""
         self.fields['groups'].help_text = ""
 
