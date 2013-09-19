@@ -64,7 +64,6 @@ class Home(ListView):
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
         context['recent_list'] = Photo.objects.order_by('-dt')[0:20]
-        print context['recent_list']
         if not self.request.user.is_authenticated():
             context['signin_form'] = MyAuthenticationForm()
             context['registration_form'] = RegistrationForm()
