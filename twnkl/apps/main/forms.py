@@ -4,7 +4,13 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms.widgets import TextInput, PasswordInput
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
 from twnkl.apps.main.models import Photo, PhotoGroup
+
+class BetterCheckbox(forms.CheckboxMultipleSelect):
+    def render(self):
+        return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
+
 
 class RegistrationForm(UserCreationForm):
     class Meta:
@@ -57,8 +63,8 @@ class PhotoUploadForm(forms.ModelForm):
         self.fields['image'].widget = FileInput(attrs={'style':'display:none'})
         self.fields['image'].label = ""
         self.fields['image'].help_text = ""
-        self.fields['groups'].widget = CheckboxSelectMultiple(choices=[(o.id, str(o.name)) for o in PhotoGroup.objects.filter(owner__username=user)])
-        self.fields['groups'].label = ""
+        self.fields['groups'].widget = BetterCheckbox(choices=[(o.id, str(o.name)) for o in PhotoGroup.objects.filter(owner__username=user)])
+        self.fields['groups'].label = "Check which photo groups to add this image to:"
         self.fields['groups'].help_text = ""
         #self.fields['loc'].widget = TextInput(attrs={'placeholder': 'Where?',
         #                                             'class':'form-control'})
