@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from twnkl.apps.main.models import Photo, PhotoGroup
 
-class BetterCheckbox(forms.CheckboxMultipleSelect):
+class BetterCheckbox(forms.CheckboxSelectMultiple):
     def render(self):
         return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
 
