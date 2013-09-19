@@ -26,5 +26,5 @@ MEDIA_URL += "media/"
 INSTALLED_APPS += ('gunicorn', 'storages', 'raven.contrib.django.raven_compat')
 
 RAVEN_CONFIG = {
-        'dsn': os.environ['SENTRY_DSN'],
-        }
+            'dsn': 'https://790da17eae914050a378b2c5a8ab144c:f16e8a80844a414baa64c74682b6a8ae@app.getsentry.com/13264',
+            }
