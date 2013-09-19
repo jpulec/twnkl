@@ -25,7 +25,7 @@ S3_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 ADMIN_MEDIA_PREFIX = S3_URL + 'admin/'
 STATIC_URL = MEDIA_URL = S3_URL
 
-STATIC_URL += "/static/"
-MEDIA_URL += "/media/"
+STATIC_URL += "static/"
+MEDIA_URL += "media/"
 
 INSTALLED_APPS += ('gunicorn', 'storages',)
