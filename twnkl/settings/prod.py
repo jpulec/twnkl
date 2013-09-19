@@ -23,8 +23,50 @@ STATIC_URL = MEDIA_URL = S3_URL
 STATIC_URL += "static/"
 MEDIA_URL += "media/"
 
-INSTALLED_APPS += ('gunicorn', 'storages', 'raven.contrib.django.raven_compat')
+INSTALLED_APPS += ('gunicorn', 'storages', 'raven.contrib.django.raven_compat',)
 
 RAVEN_CONFIG = {
             'dsn': 'https://790da17eae914050a378b2c5a8ab144c:f16e8a80844a414baa64c74682b6a8ae@app.getsentry.com/13264',
             }
+
+LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': True,
+        'root': {
+            'level': 'WARNING',
+            'handlers': ['sentry'],
+            },
+        'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+                },
+            },
+        'handlers': {
+            'sentry': {
+                'level': 'ERROR',
+                'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+                },
+            'console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+                'formatter': 'verbose'
+                }
+            },
+        'loggers': {
+            'django.db.backends': {
+                'level': 'ERROR',
+                'handlers': ['console'],
+                'propagate': False,
+                },
+            'raven': {
+                'level': 'DEBUG',
+                'handlers': ['console'],
+                'propagate': False,
+                },
+            'sentry.errors': {
+                'level': 'DEBUG',
+                'handlers': ['console'],
+                'propagate': False,
+                },
+            },
+        }
