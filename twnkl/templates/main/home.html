@@ -28,6 +28,25 @@ $('#browse_btn').click( function () {
         $('input[id=id_image]').click();
         });
 
+$('#upload_form').submit( function () {
+        $('#id_tags').val($('#id_tags').val() + ")");
+        });
+
+var counter = 0;
+
+$('#add_tag_btn').click( function() {
+        $('#tag_text').val($('#tag_text').val().replace(/\W/g, ''));
+        $('#tags').html($('#tags').html() + '<h2 id="tag_' + $('#tag_text').val() + '"><span class="col-sm-10 label label-default" style="margin: 5px 5px 5px 5px;">' + $('#tag_text').val() + '</span></h2><span id="tag_' + $('#tag_text').val() + '_close" class="col-sm-1">&times;</span>'); 
+        $('#tag_' + $('#tag_text').val() + '_close').click( function() {
+            $('#tag_' + $('#tag_text').val() + '_close').remove();
+            $('#tag_' + $('#tag_text').val()).remove();
+            $('input[value=' + $(this).val() + ']').remove();
+            });
+            $('#tags').prepend('<input id="id_tags_' + counter + '" name="tags" type="hidden" value="' + $('#tag_text').val() + '">');
+            counter += 1;
+        });
+
+
 {% for photo in recent_list %}
 
 $("#id_{{ photo.safe_filename }}").popover({ 'html':'true',
