@@ -4,7 +4,13 @@
     </div>
     <div class="panel-body">
     {% for photo in object_list %}
-        {{ photo }}
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <p>
+            <a href="{% url "photo" photo.owner.username "default" photo.pk %}" class="thumbnail">
+                <img id="id_{{ photo.safe_filename }}" src="{{ photo.image.url }}">
+            </a>
+            </p>
+        </div>
     {% endfor %}
 </div>
 </div>
