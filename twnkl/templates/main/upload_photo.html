@@ -16,7 +16,7 @@
             <form id="upload_form" enctype="multipart/form-data" action="{% url "upload_photo" %}" method="post">
                 {% csrf_token %}
                 <div class="input-group">
-                    <input id="photoCover" class="form-control" type="text">
+                    <input id="photoCover" class="form-control" type="text" required>
                     <span class="input-group-btn">
                         <button id="browse_btn" class="btn btn-default" type="button">Browse</button>
                     </span>
@@ -27,6 +27,16 @@
                 </p>
                 {% endfor %}
                 <p>
+                <div id="tags" class="container row row-fluid">
+                </div>
+                <p>
+                </p>
+                <div class="input-group">
+                    <input class="form-control" type="text" id="tag_text" placeholder="Enter tag">
+                    <span class="input-group-btn">
+                        <button id="add_tag_btn" class="btn btn-default" type="button">+</button>
+                    </span>
+                </div>
                 </p> 
                 <button type="submit" class="btn btn-primary btn-large">Upload Photo</button>
             </form>

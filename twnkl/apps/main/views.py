@@ -8,11 +8,12 @@ from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.utils.encoding import force_text
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 from django.http import HttpResponseRedirect
 from twnkl.apps.main.forms import MyAuthenticationForm, RegistrationForm, PhotoUploadForm, PhotoUpdateForm
-from twnkl.apps.main.models import Photo, PhotoGroup
+from twnkl.apps.main.models import Photo, PhotoGroup, Tag
 from geoposition import Geoposition
 from PIL import Image
 from PIL.ExifTags import TAGS
@@ -64,7 +65,6 @@ class Home(ListView):
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
         context['recent_list'] = Photo.objects.order_by('-dt')[0:20]
-        print context['recent_list']
         if not self.request.user.is_authenticated():
             context['signin_form'] = MyAuthenticationForm()
             context['registration_form'] = RegistrationForm()
@@ -145,10 +145,6 @@ class UploadPhotoView(CreateView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         form.instance.owner = User.objects.get(username=self.request.user)
-        #tag_objects = []
-        #for tag in self.request.POST.get('tags', ""):
-        #    tag_objects = [tag_object for tag_object, created in Tag.objects.get_or_create(text=tag)]
-        #form.instance.tags = tag_objects
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -159,8 +155,8 @@ class UploadPhotoView(CreateView):
         if "GPSInfo" in exif_data:
             if 2 in exif_data['GPSInfo'] and 4 in exif_data['GPSInfo']:
                 form.instance.loc = Geopostion(exif_data['GPSInfo'][2], exif_data['GPSInfo'][4]) 
-        form.save()
-        return super(UploadPhotoView, self).form_valid(form)
+        self.object = form.save()
+        return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self):
         return HttpResponseRedirect("/")
