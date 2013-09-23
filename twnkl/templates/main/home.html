@@ -56,6 +56,14 @@ $("#id_{{ photo.safe_filename }}").popover({ 'html':'true',
                                      'content':"<img src='{{ photo.image.url }}' width='100%'>"});
 {% endfor %}
 
+{% for photo in object_list %}
+
+$("#id_{{ photo.safe_filename }}").popover({ 'html':'true',
+                                     'placement':'bottom',
+                                     'trigger': 'hover',
+                                     'container': 'body',
+                                     'content':"<img src='{{ photo.image.url }}' width='100%'>"});
+{% endfor %}
 </script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBaLOIWJwRzsQWsWBrfdRA4C5XRnzenh5s&sensor=true"></script>
 {% include "main/map_location_js.html" %} 

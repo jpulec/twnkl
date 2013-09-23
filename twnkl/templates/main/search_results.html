@@ -20,3 +20,17 @@
 
 
 {% endblock %}
+
+{% block script %}
+
+<script>
+{% for photo in object_list %}
+
+$("#id_{{ photo.safe_filename }}").popover({ 'html':'true',
+                                     'placement':'bottom',
+                                     'trigger': 'hover',
+                                     'container': 'body',
+                                     'content':"<img src='{{ photo.image.url }}' width='100%'>"});
+{% endfor %}
+</script>
+{% endblock script %}
