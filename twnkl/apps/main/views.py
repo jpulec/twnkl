@@ -57,9 +57,9 @@ class Home(ListView):
     def get_queryset(self):
         photos = []
         threshold = 0.5
-        for photo in Photo.objects.all():
-            if pow(pow(float(photo.loc.latitude), 2) + pow(float(photo.loc.longitude), 2), 0.5) < threshold:
-                photos.append(photo)
+        #for photo in Photo.objects.all():
+        #    if pow(pow(float(photo.loc.latitude), 2) + pow(float(photo.loc.longitude), 2), 0.5) < threshold:
+        #        photos.append(photo)
         return photos
 
     def get_context_data(self, **kwargs):
