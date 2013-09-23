@@ -1,11 +1,16 @@
 {% extends "base.html" %}
 
 {% block body %}
-{% for photo in object_list %}
-    {{ photo }}
-{% endfor %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Search for {{ term }}</h3>
+    </div>
+    <div class="panel-body">
+    {% for photos in object_list %}
+        {{ photo }}
+    {% endfor %}
+</div>
 
-{{ term }}
 
 
 {% endblock %}
